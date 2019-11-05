@@ -1,0 +1,33 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.13
+    working_directory: /go/src/github.com/ministryofjustice/analytical-platform-auth0-user-exports
+    environment:
+      TEST_RESULTS: /tmp/test-results
+      DOCKER_IMAGE_NAME: quay.io/mojanalytics/auth0-user-exports
+      DOCKER_IMAGE_TAG: $(echo $CIRCLE_SHA1 | cut -c -8)
+    steps:
+      - checkout
+      - run: mkdir -p $TEST_RESULTS # create the test results directory
+      - restore_cache: # restores saved cache if no changes are detected since last run
+      # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+          keys:
+            - v1-pkg-cache
+      - run:
+          name: Run unit tests
+          command: |
+            go test ./... -coverprofile ./... | tee ${TEST_RESULTS}/tests.txt
+      - save_cache: # Store cache in the /go/pkg directory
+          key: v1-pkg-cache
+          paths:
+            - "/go/pkg"
+      - store_test_results: # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+          path: /tmp/test-results
+      - run: |
+          docker login -u $QUAY_USERNAME -p $QUAY_PASSWORD -e $QUAY_EMAIL quay.io
+          docker image build -t $DOCKER_IMAGE_NAME:$CIRCLE_BRANCH .
+          docker image tag -f $DOCKER_IMAGE_NAME:$CIRCLE_BRANCH $DOCKER_IMAGE_NAME:latest
+          docker push $DOCKER_IMAGE_NAME:$CIRCLE_BRANCH
+          docker push $DOCKER_IMAGE_NAME:latest
