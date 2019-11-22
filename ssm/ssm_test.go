@@ -36,7 +36,7 @@ func TestGetSsmParams(t *testing.T) {
 	const expectedClientSecretVal = "test-client-secret"
 	ssmSvc := &mockSsmClient{}
 
-	params, err := GetSsmParams(ssmSvc, "/alpha/airflow/airflow_test/secrets/CLIENT_SECRET")
+	params, err := GetSsmParams(ssmSvc, "/alpha/airflow/airflow_test/secrets/")
 	assert.Nil(t, err, err)
 	if assert.NotNil(t, params) {
 		assert.Equal(t, expectedClientIdVal, params["CLIENT_ID"])
