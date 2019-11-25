@@ -69,13 +69,15 @@ export BUCKET=my-auth0-bucket
 
 ```
 
+[ssm]: https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParametersByPath.html
+
 ### Configuration
 
 | Env Variable  | Default  | Description                                |
 |---------------|----------|--------------------------------------------|
 | `CLIENT_ID` | (**Required**) | The Client ID of the auth0 application used for this app |
 | `CLIENT_SECRET` | (**Required**) | The Client Secret of the auth0 application used for this app |
-| `SSM_PATH`    | (**Required**) | **Required If** `CLIENT_ID` and `CLIENT_SECRET` are unset | 
+| `SSM_PATH`    | | [SSM Parameter Path][ssm] to retrieve `CLIENT_ID` and `CLIENT_SECRET` values. **Required If** `CLIENT_ID` and `CLIENT_SECRET` environment variables are unset | 
 | `API_URL`     | https://alpha-analytics-moj.eu.auth0.com | Auth0 management API endpoint |
 | `CONNECTION_NAME` | `github` | Config param for auth0.  Which connection to target when querying the API (https://auth0.com/docs/identityproviders) |
 | `ENV` | (**Write Data Locally**) | **Do not set** to write locally or set to `aws` to write data to `S3` |
@@ -83,7 +85,7 @@ export BUCKET=my-auth0-bucket
 | `FILE_PATH` | `/tmp/userdata.csv` | File path when writing locally. Only works when `ENV` is **not** set |
 | `BUCKET` | `auth0-userdata` | The `S3` bucket to write to when `ENV=aws` is set.  The resulting key will be suffixed with the date i.e `userdata-22-09-2019` |
 
-##### Test
+### Test
 
 To run tests, `cd` to the root of this project
 
