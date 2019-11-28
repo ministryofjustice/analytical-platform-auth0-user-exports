@@ -81,7 +81,7 @@ export BUCKET=my-auth0-bucket
 | `API_URL`     | https://alpha-analytics-moj.eu.auth0.com | Auth0 management API endpoint |
 | `CONNECTION_NAME` | `github` | Config param for auth0.  Which connection to target when querying the API (https://auth0.com/docs/identityproviders) |
 | `ENV` | (**Write Data Locally**) | **Do not set** to write locally or set to `aws` to write data to `S3` |
-| `ROLE_ARN` | `arn:aws:iam::593291632749:role/airflow_auth0-user-exports` | The role this app uses to write to `S3` |
+| `ROLE_ARN` | `arn:aws:iam::593291632749:role/airflow_auth0_user_exports` | The role this app uses to write to `S3` and fetch `ssm` parameters |
 | `FILE_PATH` | `/tmp/userdata.csv` | File path when writing locally. Only works when `ENV` is **not** set |
 | `BUCKET` | `auth0-userdata` | The `S3` bucket to write to when `ENV=aws` is set.  The resulting key will be suffixed with the date i.e `userdata-22-09-2019` |
 
